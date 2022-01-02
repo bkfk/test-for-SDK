@@ -11,6 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::resource('identification-number', 'IdentificationNumberController');
+Route::redirect('/', 'identification-number');
+
+Route::get('test', function() {
+  return view('test');
 });
