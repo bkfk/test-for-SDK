@@ -19,16 +19,15 @@ class FnsApiService
       'timeout' => 120,
     ]);
     $form_params = [
-      // 'inn' => $inn,
-      // 'json' => $request_date,
-      'inn' => 0,
-      'json' => '',
+      'inn' => $inn,
+      'requestDate' => $request_date,
     ];
 
     try {
-      $response = $client->post($url, ['form_params' => $form_params]);
-      $inn_status = json_decode($response->getBody()->getContents())['status'] ?? false;
-      $identificationNumber->update(['inn_status' => $inn_status, 'service_response' => $response->getBody()->getContents()]);
+      $response = $client->post($url, ['json' => $form_params]);
+      $response_data = json_decode($response->getBody()->getContents());
+      $inn_status = $response_data->status ?? false;
+      $identificationNumber->update(['inn_status' => $inn_status, 'service_response' => $response_data]);
     } catch (TransferException $e) {
       $identificationNumber->update(['error' => Psr7\Message::toString($e->getResponse())]);
     }
