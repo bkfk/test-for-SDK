@@ -27,7 +27,7 @@ class FnsApiService
       $response = $client->post($url, ['json' => $form_params]);
       $response_data = json_decode($response->getBody()->getContents());
       $inn_status = $response_data->status ?? false;
-      $identificationNumber->update(['inn_status' => $inn_status, 'service_response' => $response_data]);
+      $identificationNumber->update(['inn_status' => $inn_status, 'service_response' => $response_data, 'error' => null]);
     } catch (TransferException $e) {
       $identificationNumber->update(['error' => Psr7\Message::toString($e->getResponse())]);
     }
